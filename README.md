@@ -71,8 +71,8 @@ pip install -r requirements.txt
 ### ✅ 4.Running the Project Execute the Commands to run 
 
 ```bash
-python otsu_threshold.py       # For Q1 - Otsu Threshold
-python region_growing.py       # For Q2 - Region Growing
+python Q1__otsu_threshold.py       # For Q1 - Otsu Threshold
+python Q2__region_growing.py       # For Q2 - Region Growing
 ```
 Process the img1.png and save all visual results in the output/ folder.
 
