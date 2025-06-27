@@ -44,7 +44,6 @@ def run_region_growing():
 
     cv2.imwrite(output_path, region)
 
-    # Plot
     plt.figure(figsize=(8, 4))
     plt.subplot(1, 2, 1)
     plt.title("Input Image")
