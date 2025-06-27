@@ -1,50 +1,87 @@
+import os
 import cv2
 import numpy as np
-import os
 import matplotlib.pyplot as plt
 
-def otsu_with_gaussian_noise():
-    input_path = "input/img1.png"
-    output_folder = "output"
-    os.makedirs(output_folder, exist_ok=True)
+input_path = "input/img1.png"
+output_folder = "output"
+output_path = os.path.join(output_folder, "task01_output.png")
 
-    img = cv2.imread(input_path, cv2.IMREAD_GRAYSCALE)
-    if img is None:
-        print(f"Error: Could not read the image at {input_path}")
-        return
+os.makedirs(output_folder, exist_ok=True)
 
-    noise = np.random.normal(0, 10, img.shape).astype(np.int16)
-    noisy_img = np.clip(img.astype(np.int16) + noise, 0, 255).astype(np.uint8)
+input_image = cv2.imread(input_path)
+if input_image is None:
+    raise FileNotFoundError(f"{input_path} not found!")
 
-    threshold_val, otsu_result = cv2.threshold(
-        noisy_img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU
-    )
+input_image_rgb = cv2.cvtColor(input_image, cv2.COLOR_BGR2RGB)
+gray_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2GRAY)
 
-    output_path = os.path.join(output_folder, "otsu_threshold.png")
-    cv2.imwrite(output_path, otsu_result)
+def add_gaussian_noise(image, mean=0, std=20):
+    noise = np.random.normal(mean, std, image.shape).astype(np.int16)
+    noisy = image.astype(np.int16) + noise
+    noisy = np.clip(noisy, 0, 255).astype(np.uint8)
+    return noisy
 
-    display_path = os.path.join(output_folder, "otsu_display.png")
-    plt.figure(figsize=(10, 4))
-    plt.subplot(1, 3, 1)
-    plt.title("Original Image")
-    plt.imshow(img, cmap='gray')
-    plt.axis('off')
+noisy_image = add_gaussian_noise(gray_image)
 
-    plt.subplot(1, 3, 2)
-    plt.title("Noisy Image")
-    plt.imshow(noisy_img, cmap='gray')
-    plt.axis('off')
+def otsu(image):
+    histogram, _ = np.histogram(image.ravel(), bins=256, range=(0, 256))
+    total_pixels = image.size
+    sum_total = np.dot(np.arange(256), histogram)
 
-    plt.subplot(1, 3, 3)
-    plt.title(f"Otsu Threshold = {threshold_val:.2f}")
-    plt.imshow(otsu_result, cmap='gray')
-    plt.axis('off')
+    sumB = 0
+    wB = 0
+    max_variance = 0
+    threshold = 0
 
-    plt.tight_layout()
-    plt.savefig(display_path)
-    plt.show()
+    for t in range(256):
+        wB += histogram[t]
+        if wB == 0:
+            continue
+        wF = total_pixels - wB
+        if wF == 0:
+            break
 
-    print(f"Otsu thresholded image saved to {output_path}")
-    print(f"Otsu visualization saved to {display_path}")
+        sumB += t * histogram[t]
+        mB = sumB / wB
+        mF = (sum_total - sumB) / wF
 
-otsu_with_gaussian_noise()
+        between_variance = wB * wF * (mB - mF) ** 2
+
+        if between_variance > max_variance:
+            max_variance = between_variance
+            threshold = t
+
+    binary = (image >= threshold).astype(np.uint8) * 255
+    return threshold, binary
+
+otsu_thresh, otsu_result = otsu(noisy_image)
+
+plt.figure(figsize=(12, 8))
+
+plt.subplot(2, 2, 1)
+plt.title("Original Image")
+plt.imshow(input_image_rgb)
+plt.axis("off")
+
+plt.subplot(2, 2, 2)
+plt.title("Noisy Image (Grayscale)")
+plt.imshow(noisy_image, cmap='gray')
+plt.axis("off")
+
+plt.subplot(2, 2, 3)
+plt.title("Otsu's Thresholding Result")
+plt.imshow(otsu_result, cmap='gray')
+plt.axis("off")
+
+plt.subplot(2, 2, 4)
+plt.title("Histogram with Otsu Threshold")
+plt.hist(noisy_image.ravel(), bins=256, range=(0, 256), color='gray')
+plt.axvline(x=otsu_thresh, color='red', linestyle='--', label=f'Threshold = {otsu_thresh}')
+plt.xlabel("Pixel Intensity")
+plt.ylabel("Frequency")
+plt.legend()
+
+plt.tight_layout()
+plt.savefig(output_path, dpi=300)
+plt.show()
