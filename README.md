@@ -1,44 +1,36 @@
-# Image Processing Operations – EC7212 Assignment
+# Image Segmentation Techniques in Python – EC7212 Assignment
 
-This project is developed as part of the **EC7212 - Computer Vision and Image Processing** course. It demonstrates key image processing techniques using Python, OpenCV, and NumPy.
+This repository contains implementations of two fundamental image segmentation techniques in Python using OpenCV and NumPy.
 
 ---
 
-## 📌 Objectives
+## Objectives
 
 Python programs perform the following image processing tasks:
 
-### ✅ Q1: Image Processing Operations
-1. **Intensity Level Reduction**  
-   Reduce grayscale levels from 256 to 2 in powers of 2 (e.g., 16, 4, 2).  
-2. **Spatial Averaging**  
-   Apply 3×3, 10×10, and 20×20 average filters to smooth images.  
-3. **Image Rotation**  
-   Rotate image by 45° and 90° using OpenCV rotate and affine methods.  
-4. **Spatial Resolution Reduction**  
-   Simulate pixelation by averaging 3×3, 5×5, and 7×7 blocks.
-
-### ✅ Q2: Image Segmentation Techniques
+### Image Segmentation Techniques
 1. **Otsu Thresholding with Gaussian Noise**  
-   Add noise to a simple 3-class image and segment using Otsu’s method.  
+   Add noise to a simple 3-class image and segment using Otsu’s method. 
+   This technique enhances a synthetic grayscale image with Gaussian noise to simulate real-world imperfections. Otsu's algorithm is then applied to automatically determine the optimal threshold for separating foreground and background. The result demonstrates robust binarization even in noisy conditions. 
 2. **Region Growing Segmentation**  
-   Use a seed pixel and grow region based on similarity threshold.
+   Starting from a user-defined seed pixel, this method recursively expands the segmented region by evaluating pixel intensity similarity within a predefined threshold. It effectively segments objects based on local homogeneity, making it suitable for separating regions with subtle variations. The implementation is efficient and well-suited for grayscale object-based segmentation tasks.
+
 
 ---
 
 ## 📁 Project Structure
 
 ```
-cvip-assignment-2/
-├── input/                        # Input image (grayscale)
-│   └── img1.jpg
+EC7212-Computer-Vision-and-Image-Processing-Assignment_02/
+├── input/                        # Input image
+│   └── img1.png
 ├── output/                       # Output results
 │   ├── otsu_threshold.png
 │   ├── otsu_display.png
 │   ├── region_growing_output.png
 │   └── region_growing_display.png
-├── region_growing.py             # Region Growing Script (Q2)
-├── otsu_threshold.py             # Otsu with Gaussian Noise (Q1)
+├── Q1__otsu_threshold.py         # Otsu with Gaussian Noise (Q1)
+├── Q2__region_growing.py         # Region Growing Script (Q2)
 ├── README.md                     # Project documentation
 └── requirements.txt              # Dependencies
 ```
