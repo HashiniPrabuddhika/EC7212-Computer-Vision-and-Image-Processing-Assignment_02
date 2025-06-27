@@ -23,12 +23,11 @@ Python programs perform the following image processing tasks:
 ```
 EC7212-Computer-Vision-and-Image-Processing-Assignment_02/
 ├── input/                        # Input image
-│   └── img1.png
+│   ├── img1.png
+│   └── img2.jpg
 ├── output/                       # Output results
-│   ├── otsu_threshold.png
-│   ├── otsu_display.png
-│   ├── region_growing_output.png
-│   └── region_growing_display.png
+│   ├── task01_output.png
+│   └── region_growing_output.png
 ├── Q1__otsu_threshold.py         # Otsu with Gaussian Noise (Q1)
 ├── Q2__region_growing.py         # Region Growing Script (Q2)
 ├── README.md                     # Project documentation
@@ -99,9 +98,8 @@ Result:
 
 | Task                    | Output File                   |
 |-------------------------|-------------------------------|
-| Otsu Thresholding       | `otsu_threshold.png`          |
-| Otsu Visualization      | `otsu_display.png`            |
+| Otsu Thresholding       | `task01_output.png`          |
 | Region Growing Output   | `region_growing_output.png`   |
-| Region Growing Display  | `region_growing_display.png`  |
+
 
 ---
