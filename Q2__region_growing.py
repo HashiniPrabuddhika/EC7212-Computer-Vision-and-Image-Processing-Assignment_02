@@ -1,65 +1,66 @@
+import os
 import cv2
 import numpy as np
-import os
 import matplotlib.pyplot as plt
 
-def region_growing(img, seed, threshold=10):
-    h, w = img.shape
-    visited = np.zeros((h, w), dtype=bool)
-    region = np.zeros((h, w), dtype=np.uint8)
+input_path = "input/img2.jpg"
+output_folder = "output"
+output_filename = "region_growing_output.png"
+output_path = os.path.join(output_folder, output_filename)
 
-    seed_val = img[seed]
-    stack = [seed]
+os.makedirs(output_folder, exist_ok=True)
 
-    while stack:
-        y, x = stack.pop()
+image = cv2.imread(input_path, cv2.IMREAD_GRAYSCALE)
+if image is None:
+    raise FileNotFoundError(f"{input_path} not found!")
+
+def region_growing(image, seeds, threshold=10):
+    height, width = image.shape
+    segmented = np.zeros_like(image, dtype=np.uint8)
+    visited = np.zeros_like(image, dtype=bool)
+
+    queue = list(seeds)
+    seed_values = [image[y, x] for x, y in seeds]
+    mean_value = np.mean(seed_values)
+
+    while queue:
+        x, y = queue.pop(0)
         if visited[y, x]:
             continue
         visited[y, x] = True
 
-        if abs(int(img[y, x]) - int(seed_val)) <= threshold:
-            region[y, x] = 255
-            for dy in [-1, 0, 1]:
-                for dx in [-1, 0, 1]:
-                    ny, nx = y + dy, x + dx
-                    if (0 <= ny < h) and (0 <= nx < w) and not visited[ny, nx]:
-                        stack.append((ny, nx))
-    return region
+        current_value = image[y, x]
+        if abs(int(current_value) - int(mean_value)) <= threshold:
+            segmented[y, x] = 255
 
-def run_region_growing():
-    input_path = "input/img1.png"
-    output_folder = "output"
-    os.makedirs(output_folder, exist_ok=True)
+            for dx in [-1, 0, 1]:
+                for dy in [-1, 0, 1]:
+                    nx, ny = x + dx, y + dy
+                    if (0 <= nx < width) and (0 <= ny < height) and not visited[ny, nx]:
+                        queue.append((nx, ny))
 
-    img = cv2.imread(input_path, cv2.IMREAD_GRAYSCALE)
-    if img is None:
-        print("Error: Could not read the image.")
-        return
+    return segmented
 
-    seed = (30, 30)  
-    region = region_growing(img, seed, threshold=10)
+seed_points = [(100, 150), (120, 170), (180, 170), (190, 150)]  
 
-    output_path = os.path.join(output_folder, "region_growing_output.png")
-    display_path = os.path.join(output_folder, "region_growing_display.png")
+segmented_mask = region_growing(image, seed_points, threshold=10)
 
-    cv2.imwrite(output_path, region)
+image_marked = cv2.cvtColor(image, cv2.COLOR_GRAY2BGR)
+for x, y in seed_points:
+    cv2.circle(image_marked, (x, y), radius=4, color=(255, 0, 0), thickness=-1)
 
-    plt.figure(figsize=(8, 4))
-    plt.subplot(1, 2, 1)
-    plt.title("Input Image")
-    plt.imshow(img, cmap='gray')
-    plt.axis('off')
+plt.figure(figsize=(10, 4))
 
-    plt.subplot(1, 2, 2)
-    plt.title("Region Grown Output")
-    plt.imshow(region, cmap='gray')
-    plt.axis('off')
+plt.subplot(1, 2, 1)
+plt.title("Original Image with Seeds")
+plt.imshow(cv2.cvtColor(image_marked, cv2.COLOR_BGR2RGB))
+plt.axis("off")
 
-    plt.tight_layout()
-    plt.savefig(display_path)
-    plt.show()
+plt.subplot(1, 2, 2)
+plt.title("Region Growing Segmentation")
+plt.imshow(segmented_mask, cmap='gray')
+plt.axis("off")
 
-    print(f"Region grown image saved to {output_path}")
-    print(f"Visualization saved to {display_path}")
-
-run_region_growing()
+plt.tight_layout()
+plt.savefig(output_path, dpi=300)
+plt.show()
