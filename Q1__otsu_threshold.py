@@ -13,20 +13,16 @@ def otsu_with_gaussian_noise():
         print(f"Error: Could not read the image at {input_path}")
         return
 
-    # Add Gaussian noise
     noise = np.random.normal(0, 10, img.shape).astype(np.int16)
     noisy_img = np.clip(img.astype(np.int16) + noise, 0, 255).astype(np.uint8)
 
-    # Apply Otsu's thresholding
     threshold_val, otsu_result = cv2.threshold(
         noisy_img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU
     )
 
-    # Save thresholded result
     output_path = os.path.join(output_folder, "otsu_threshold.png")
     cv2.imwrite(output_path, otsu_result)
 
-    # Display results
     display_path = os.path.join(output_folder, "otsu_display.png")
     plt.figure(figsize=(10, 4))
     plt.subplot(1, 3, 1)
