@@ -18,7 +18,7 @@ Python programs perform the following image processing tasks:
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 EC7212-Computer-Vision-and-Image-Processing-Assignment_02/
@@ -37,53 +37,65 @@ EC7212-Computer-Vision-and-Image-Processing-Assignment_02/
 
 ---
 
-## ⚙️ Getting Started
+## Getting Started
 
-### Prerequisites
+### ✅ 1.Prerequisites
 
 - Python 3.7+
 - OpenCV
 - NumPy
 - Matplotlib
 
-### Setup Instructions
+### ✅ 2.Setup Instructions
+
+- Clone the repository:
 
 ```bash
-# Clone repo (if hosted online)
-git clone https://github.com/your-username/EC7212-Assignment.git
-cd EC7212-Assignment
+git clone https://github.com/HashiniPrabuddhika/EC7212-Computer-Vision-and-Image-Processing-Assignment_02.git
+cd EC7212-Computer-Vision-and-Image-Processing-Assignment_02
+```
 
-# Create virtual environment
+### ✅ 3.Create and activate a virtual environment:
+```bash
+# For Windows
 python -m venv venv
-source venv/bin/activate  # Or venv\Scripts\activate on Windows
+venv\Scripts\activate
 
+# For macOS/Linux
+python3 -m venv venv
+source venv/bin/activate
+Install the dependencies:
 # Install dependencies
 pip install -r requirements.txt
 ```
 
-### Run Scripts
+### ✅ 4.Running the Project Execute the Commands to run 
 
 ```bash
-python otsu_threshold.py       # For Q2 - Otsu Threshold
+python otsu_threshold.py       # For Q1 - Otsu Threshold
 python region_growing.py       # For Q2 - Region Growing
 ```
+Process the img1.png and save all visual results in the output/ folder.
 
 ---
 
-## 📷 Results and Explanations
+## Results and Explanations
 
-### 🧪 Otsu Thresholding
-- Gaussian noise is added to a synthetic image.
-- Otsu’s method automatically selects the best threshold.
-- Output: `otsu_threshold.png`, `otsu_display.png`
+### Otsu Thresholding
+In this task, Gaussian noise is added to a synthetic grayscale image containing distinct objects and a background. Otsu’s method is then used to automatically determine the optimal threshold value that best separates the noisy foreground from the background. The resulting binary segmentation is saved in otsu_threshold.png, with a side-by-side visualization in otsu_display.png.
 
-### 🌱 Region Growing
-- Starts from a seed point and grows based on intensity similarity.
-- Output: `region_growing_output.png`, `region_growing_display.png`
+Result:
+![otsu_display](output/otsu_display.png)
+
+### Region Growing
+This technique begins from a predefined seed point within the object of interest and expands the segmented area by recursively including neighboring pixels that fall within a specified intensity range. It effectively captures homogeneous regions based on local similarity, making it suitable for object-based segmentation. The segmented output is saved as region_growing_output.png, and a visual comparison is provided in region_growing_display.png.
+
+Result:
+![region_growing_display](output/region_growing_display.png)
 
 ---
 
-## 📂 Output Preview
+## Output Preview
 
 | Task                    | Output File                   |
 |-------------------------|-------------------------------|
