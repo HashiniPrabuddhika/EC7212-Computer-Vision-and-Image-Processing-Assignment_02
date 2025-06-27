@@ -36,8 +36,7 @@ def run_region_growing():
         print("Error: Could not read the image.")
         return
 
-    # Pick a known seed point inside the square or circle
-    seed = (30, 30)  # Inside the gray square
+    seed = (30, 30)  
     region = region_growing(img, seed, threshold=10)
 
     output_path = os.path.join(output_folder, "region_growing_output.png")
