@@ -85,7 +85,7 @@ Process the img1.png and save all visual results in the output/ folder.
 In this task, Gaussian noise is added to a synthetic grayscale image containing distinct objects and a background. Otsu’s method is then used to automatically determine the optimal threshold value that best separates the noisy foreground from the background. The resulting binary segmentation is saved in otsu_threshold.png, with a side-by-side visualization in otsu_display.png.
 
 Result:
-![otsu_display](output/otsu_display.png)
+![otsu_display](output/task01_output.png)
 
 ### Region Growing
 This technique begins from a predefined seed point within the object of interest and expands the segmented area by recursively including neighboring pixels that fall within a specified intensity range. It effectively captures homogeneous regions based on local similarity, making it suitable for object-based segmentation. The segmented output is saved as region_growing_output.png, and a visual comparison is provided in region_growing_display.png.
