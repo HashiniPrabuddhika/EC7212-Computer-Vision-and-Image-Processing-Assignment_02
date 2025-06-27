@@ -91,7 +91,7 @@ Result:
 This technique begins from a predefined seed point within the object of interest and expands the segmented area by recursively including neighboring pixels that fall within a specified intensity range. It effectively captures homogeneous regions based on local similarity, making it suitable for object-based segmentation. The segmented output is saved as region_growing_output.png, and a visual comparison is provided in region_growing_display.png.
 
 Result:
-![region_growing_display](output/region_growing_display.png)
+![region_growing_display](output/region_growing_output.png)
 
 ---
 
